@@ -17,6 +17,10 @@ return new class extends Migration
             $table->boolean('charge')->default(false);;
             $table->integer('amount');
             $table->timestamps();
+
+            $table->foreign('load_details_id')->references('id')->on('loan_details')
+            ->onUpdate('cascade')->onDelete('cascade');
+
         });
     }
 
@@ -25,6 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::create('returns', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('loan_details_id');
+        }); 
         Schema::dropIfExists('returns');
     }
 };
